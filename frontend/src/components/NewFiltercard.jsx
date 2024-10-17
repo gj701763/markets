@@ -16,13 +16,22 @@ import {
 } from "./ui/accordion"
 import { ScrollArea } from './ui/scroll-area'
 
+const categories = {
+  all: [],
+  electronics: ["Smartphones", "Laptops", "Accessories"],
+  clothing: ["Men", "Women", "Kids"],
+  home: ["Furniture", "Garden", "Decor"],
+  sports: ["Fitness", "Outdoor", "Team Sports"],
+};
+
 export default function NewFilterCard({ onClose }) {
   const [filterType, setFilterType] = useState('product')
   const [rating, setRating] = useState(0)
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   return (
     <ScrollArea >
-    <Card className="w-full  mx-auto border-none">
+    <Card className="w-full mx-auto border-none">
       <CardHeader className="flex flex-row items-center">
         <CardTitle className="flex-1">Filters</CardTitle>
       </CardHeader>
@@ -50,11 +59,76 @@ export default function NewFilterCard({ onClose }) {
                 <SelectItem value="london">Gadchiroli</SelectItem>
                 <SelectItem value="paris">Nagpur</SelectItem>
                 <SelectItem value="tokyo">Mumbai</SelectItem>
+                <SelectItem value="new">New Delhi</SelectItem>
+                <SelectItem value="pune">Pune</SelectItem>
+                <SelectItem value="sambhaji Nagar">Chhatrapati Sambhaji Nagar</SelectItem>
               </SelectContent>
             </Select>
           </div>
-
+          
+     
           <Accordion type="single" collapsible className="w-full">
+      {/* Category Selection */}
+      <AccordionItem value="category">
+        <AccordionTrigger>Category</AccordionTrigger>
+        <AccordionContent>
+          <RadioGroup
+            defaultValue="all"
+            onValueChange={(value) => setSelectedCategory(value)}
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="all" id="category-all" />
+              <Label htmlFor="category-all">All</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="electronics" id="category-electronics" />
+              <Label htmlFor="category-electronics">Electronics</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="clothing" id="category-clothing" />
+              <Label htmlFor="category-clothing">Clothing</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="home" id="category-home" />
+              <Label htmlFor="category-home">Home & Garden</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="sports" id="category-sports" />
+              <Label htmlFor="category-sports">Sports</Label>
+            </div>
+          </RadioGroup>
+        </AccordionContent>
+      </AccordionItem>
+
+      {/* Subcategory Selection */}
+      <AccordionItem value="subcategory">
+        <AccordionTrigger>Subcategory</AccordionTrigger>
+        <AccordionContent>
+          <Select>
+            <SelectTrigger id="subcategory">
+              <SelectValue placeholder="Select a subcategory" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories[selectedCategory].length > 0 ? (
+                categories[selectedCategory].map((subcategory) => (
+                  <SelectItem
+                    key={subcategory}
+                    value={subcategory.toLowerCase()}
+                  >
+                    {subcategory}
+                  </SelectItem>
+                ))
+              ) : (
+                <SelectItem value="all">No subcategories available</SelectItem>
+              )}
+            </SelectContent>
+          </Select>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+        
+
+          {/* <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="category">
               <AccordionTrigger>Category</AccordionTrigger>
               <AccordionContent>
@@ -75,6 +149,10 @@ export default function NewFilterCard({ onClose }) {
                     <RadioGroupItem value="home" id="category-home" />
                     <Label htmlFor="category-home">Home & Garden</Label>
                   </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="sports" id="category-home" />
+                    <Label htmlFor="category-sports">Sports</Label>
+                  </div>
                 </RadioGroup>
               </AccordionContent>
             </AccordionItem>
@@ -94,7 +172,7 @@ export default function NewFilterCard({ onClose }) {
                 </Select>
               </AccordionContent>
             </AccordionItem>
-          </Accordion>
+          </Accordion> */}
 
           <div className="space-y-2">
                 <Label>Rating</Label>
@@ -107,7 +185,7 @@ export default function NewFilterCard({ onClose }) {
                   onValueChange={(value) => setRating(value[0])}
                   className="mt-2"
                 />
-                <div className="text-sm text-muted-foreground mt-1">
+                <div className="mt-1 text-sm text-muted-foreground">
                   {rating.toFixed(1)} stars and above
                 </div>
           </div>
